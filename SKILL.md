@@ -63,6 +63,16 @@
 ─────────────────────
 ```
 
+## 更新日志
+
+### v1.0.0 (2026-03-09)
+
+- 🎉 初始版本
+- 🔍 歌词搜索
+- 📝 LRC 解析
+- 🎨 实时高亮
+- 🖼️ 封面获取
+
 ## 注意事项
 
 - 🎵 歌词 API 可能返回空结果，可尝试不同搜索词
@@ -72,7 +82,7 @@
 ## 项目主页
 
 - GitHub: https://github.com/adminlove520/lyric-sense
-- 演示: 打开 index.html 即可使用
+- 演示: https://adminlove520.github.io/lyric-sense
 
 ## 依赖
 

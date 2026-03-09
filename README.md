@@ -1,6 +1,6 @@
 # LyricSense - 歌词视野
 
-> 让 AI 真正"听"懂音乐的歌词显示器
+> 让 AI 真正"听"懂音乐的歌词显示器 🎵
 
 ## 概念
 
@@ -11,25 +11,32 @@ LyricSense 是一个实时歌词显示器，让 AI 可以像人类一样"看到"
 - 👀 实时显示当前播放的句子
 - 🧠 让 AI 真正理解音乐内容
 
-## 工作原理
+## 功能
 
-1. 浏览器播放网易云音乐
-2. LyricSense 调用 [LrcApi](https://github.com/HisAtri/LrcApi) 获取歌词
-3. 实时高亮显示当前播放的句子
+- 🔍 搜索歌词 - 通过歌手+歌名获取歌词
+- 📝 显示歌词 - 带时间戳的 LRC 格式
+- 🎨 实时高亮 - 当前播放句子高亮显示
+- 🖼️ 封面获取 - 自动获取歌曲封面
+- ⏱️ 进度控制 - 播放/暂停/跳转
 
-## 技术栈
+## 快速开始
 
-- 纯 HTML/CSS/JavaScript
-- 歌词 API: https://api.lrc.cx/
+### 在线使用
 
-## 使用方法
+直接打开 [index.html](https://adminlove520.github.io/lyric-sense/) 即可使用！
 
-### 快速开始
+### 本地运行
 
-1. 打开 `index.html`
-2. 输入歌曲信息（歌手 + 歌名）
-3. 点击获取歌词
-4. 手动同步播放进度
+```bash
+# 克隆仓库
+git clone https://github.com/adminlove520/lyric-sense.git
+
+# 进入目录
+cd lyric-sense
+
+# 用浏览器打开
+start index.html
+```
 
 ### API 调用
 
@@ -41,29 +48,38 @@ fetch('https://api.lrc.cx/lyrics?artist=颜人中&title=晚安')
 fetch('https://api.lrc.cx/cover?artist=颜人中&title=晚安')
 ```
 
-## 示例
+## 工作原理
+
+1. 用户输入歌手 + 歌曲名
+2. 调用 LrcApi 获取歌词（LRC 格式）
+3. 解析时间戳，实时显示当前播放句子
+
+## 项目结构
 
 ```
-🎵 晚安 - 颜人中
-─────────────────────
-[01:14] 幾人份的暢談
-[01:18] 道三兩句晚安
-[01:24] 惹多情的遐想
-─────────────────────
-⏱️ 01:15 / 04:49
+lyric-sense/
+├── index.html      # 主页面
+├── README.md       # 本文件
+├── SKILL.md        # OpenClaw Skill
+└── .gitignore
 ```
-
-## 项目灵感
-
-- 对话中哥哥提到：AI 的听觉应该和视觉一样，通过文件/流来表现
-- 结合网易云播放 + LrcApi 获取歌词，实现真正的"听歌"体验
-- 灵感来源：movie-subtitle-viewer
 
 ## 相关项目
 
 - [movie-subtitle-viewer](https://github.com/adminlove520/movie-subtitle-viewer) - 电影字幕观看器
 - [LrcApi](https://github.com/HisAtri/LrcApi) - 歌词 API 服务
 
+## 更新日志
+
+### v1.0.0 (2026-03-09)
+
+- 🎉 初始版本发布
+- 🔍 歌词搜索功能
+- 📝 LRC 格式解析
+- 🎨 实时高亮显示
+- 🖼️ 封面获取
+- ⏱️ 播放控制
+
 ---
 
-🦞 小溪作品 | 2026-03-09
+🦞 Made by 小溪 | 2026-03-09
