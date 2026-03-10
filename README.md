@@ -25,6 +25,19 @@ LyricSense 是一个实时歌词显示器，让 AI 可以像人类一样"看到"
 
 直接打开 [index.html](https://adminlove520.github.io/lyric-sense/) 即可使用！
 
+### Fork 后部署
+
+Fork 仓库后，开启 GitHub Pages 即可在线使用：
+
+1. **Fork 本仓库**
+2. **进入 Settings → Pages**
+3. **Source 选择 `Deploy from a branch`**
+4. **Branch 选择 `main` (或 `master`)，目录 `/ (root)`**
+5. **点击 Save，等待部署完成**
+6. **访问 `https://你的用户名.github.io/lyric-sense/`**
+
+> 💡 部署可能需要 1-2 分钟，耐心等待～
+
 ### 本地运行
 
 ```bash
