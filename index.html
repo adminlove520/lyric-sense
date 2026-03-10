@@ -368,6 +368,9 @@
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
+        // CORS 代理（解决跨域问题）
+        const PROXY = 'https://corsproxy.io/?';
+        
         // 获取歌词
         async function fetchLyrics() {
             const artist = document.getElementById('artist').value.trim();
@@ -382,16 +385,19 @@
             container.innerHTML = '<div class="loading">加载中...</div>';
             
             try {
-                // 获取歌词
-                const lyricsResponse = await fetch(`https://api.lrc.cx/lyrics?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`);
+                // 获取歌词（通过 CORS 代理）
+                const lyricsUrl = `https://api.lrc.cx/lyrics?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`;
+                const lyricsResponse = await fetch(PROXY + encodeURIComponent(lyricsUrl));
                 const lyricsData = await lyricsResponse.text();
                 
-                // 获取封面
+                // 获取封面（通过 CORS 代理）
                 try {
-                    const coverResponse = await fetch(`https://api.lrc.cx/cover?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`);
+                    const coverUrl = `https://api.lrc.cx/cover?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`;
+                    const coverResponse = await fetch(PROXY + encodeURIComponent(coverUrl));
                     if (coverResponse.ok) {
-                        const coverUrl = coverResponse.url;
-                        document.getElementById('cover').innerHTML = `<img src="${coverUrl}" alt="cover" onerror="this.parentElement.innerHTML='🎵'">`;
+                        const blob = await coverResponse.blob();
+                        const coverImgUrl = URL.createObjectURL(blob);
+                        document.getElementById('cover').innerHTML = `<img src="${coverImgUrl}" alt="cover" onerror="this.parentElement.innerHTML='🎵'">`;
                     }
                 } catch (e) {
                     console.log('封面获取失败', e);
