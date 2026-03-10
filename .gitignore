@@ -1,0 +1,14 @@
+# LyricSense
+
+## 忽略大文件
+scripts/LrcApi/*.exe
+scripts/LrcApi/lrcapi-*
+!.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db
