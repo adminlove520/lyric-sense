@@ -38,6 +38,35 @@ cd lyric-sense
 start index.html
 ```
 
+### 可执行文件启动 (Windows)
+
+下载 Release 中的 `lrcapi-1.6.0-Windows-AMD64.exe`：
+
+```powershell
+# 直接运行（默认端口 8080）
+.\scripts\LrcApi\lrcapi-1.6.0-Windows-AMD64.exe
+
+# 指定端口
+.\scripts\LrcApi\lrcapi-1.6.0-Windows-AMD64.exe --port 9000
+```
+
+启动后访问：
+- 歌词 API: `http://localhost:8080/lyrics?artist=颜人中&title=晚安`
+- 封面 API: `http://localhost:8080/cover?artist=颜人中&title=晚安`
+
+### Docker 自部署
+
+```bash
+# 拉取镜像
+docker pull hisatri/lrcapi:latest
+
+# 运行容器
+docker run -d -p 8080:8080 hisatri/lrcapi:latest
+
+# 测试
+curl "http://localhost:8080/lyrics?artist=颜人中&title=晚安"
+```
+
 ### API 调用
 
 ```javascript
@@ -58,10 +87,13 @@ fetch('https://api.lrc.cx/cover?artist=颜人中&title=晚安')
 
 ```
 lyric-sense/
-├── index.html      # 主页面
-├── README.md       # 本文件
-├── SKILL.md        # OpenClaw Skill
-└── .gitignore
+├── index.html              # 主页面
+├── README.md               # 本文件
+├── SKILL.md                # OpenClaw Skill
+├── CHANGELOG.md            # 更新日志
+├── .gitignore
+└── scripts/
+    └── LrcApi/             # 本地歌词 API (可执行文件)
 ```
 
 ## 相关项目
@@ -69,17 +101,6 @@ lyric-sense/
 - [movie-subtitle-viewer](https://github.com/adminlove520/movie-subtitle-viewer) - 电影字幕观看器
 - [LrcApi](https://github.com/HisAtri/LrcApi) - 歌词 API 服务
 
-## 更新日志
-
-### v1.0.0 (2026-03-09)
-
-- 🎉 初始版本发布
-- 🔍 歌词搜索功能
-- 📝 LRC 格式解析
-- 🎨 实时高亮显示
-- 🖼️ 封面获取
-- ⏱️ 播放控制
-
 ---
 
-🦞 Made by 小溪 | 2026-03-09
+🦞 Made by 小溪 | 2026-03-10
