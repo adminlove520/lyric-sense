@@ -376,8 +376,9 @@
             const artist = document.getElementById('artist').value.trim();
             const title = document.getElementById('title').value.trim();
             
-            if (!artist || !title) {
-                alert('请输入歌手和歌曲名');
+            // 修复：只需要填写歌手或歌曲之一即可搜索
+            if (!artist && !title) {
+                alert('请输入歌手或歌曲名（至少填写一项）');
                 return;
             }
             
@@ -386,18 +387,24 @@
             
             try {
                 // 获取歌词（通过 CORS 代理）
-                const lyricsUrl = `https://api.lrc.cx/lyrics?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`;
+                // 只传递有值的参数
+                const params = new URLSearchParams();
+                if (artist) params.append('artist', artist);
+                if (title) params.append('title', title);
+                const lyricsUrl = `https://api.lrc.cx/lyrics?${params.toString()}`;
                 const lyricsResponse = await fetch(PROXY + encodeURIComponent(lyricsUrl));
                 const lyricsData = await lyricsResponse.text();
                 
-                // 获取封面（通过 CORS 代理）
+                // 获取封面（通过 CORS 代理）- 只在有两个参数时才获取完整封面
                 try {
-                    const coverUrl = `https://api.lrc.cx/cover?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`;
-                    const coverResponse = await fetch(PROXY + encodeURIComponent(coverUrl));
-                    if (coverResponse.ok) {
-                        const blob = await coverResponse.blob();
-                        const coverImgUrl = URL.createObjectURL(blob);
-                        document.getElementById('cover').innerHTML = `<img src="${coverImgUrl}" alt="cover" onerror="this.parentElement.innerHTML='🎵'">`;
+                    if (artist && title) {
+                        const coverUrl = `https://api.lrc.cx/cover?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(title)}`;
+                        const coverResponse = await fetch(PROXY + encodeURIComponent(coverUrl));
+                        if (coverResponse.ok) {
+                            const blob = await coverResponse.blob();
+                            const coverImgUrl = URL.createObjectURL(blob);
+                            document.getElementById('cover').innerHTML = `<img src="${coverImgUrl}" alt="cover" onerror="this.parentElement.innerHTML='🎵'">`;
+                        }
                     }
                 } catch (e) {
                     console.log('封面获取失败', e);
