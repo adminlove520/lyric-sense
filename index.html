@@ -466,8 +466,9 @@ let rawLrcText  = '';
 
 // ── API 配置 ──────────────────────────────────────────
 const PROXIES = [
-    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
     url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
 ];
 let currentProxyIdx = 0;
 
@@ -489,20 +490,30 @@ async function apiFetch(url, opts = {}) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res;
     }
-    // Public API: try proxies in order
+    // Public API: try direct first, then proxies
+    // 1) Direct fetch (may work if api.lrc.cx adds CORS in the future)
+    try {
+        const res = await fetch(url, { ...opts, signal: AbortSignal.timeout(15000) });
+        if (res.ok) return res;
+    } catch (_) { /* CORS or network error, fall through to proxies */ }
+    // 2) Try proxies in order
     let lastErr;
     for (let i = 0; i < PROXIES.length; i++) {
         const idx = (currentProxyIdx + i) % PROXIES.length;
         try {
             const res = await fetch(PROXIES[idx](url), {
                 ...opts,
-                signal: AbortSignal.timeout(10000)
+                signal: AbortSignal.timeout(30000)
             });
             if (res.ok) {
                 currentProxyIdx = idx;
                 return res;
             }
-        } catch (e) { lastErr = e; }
+            // Non-ok: some proxies return 200 with error body, try next
+        } catch (e) {
+            lastErr = e;
+            // Continue to next proxy
+        }
     }
     throw lastErr || new Error('所有代理均请求失败');
 }
@@ -661,7 +672,10 @@ async function fetchLyrics() {
         showToast(`已加载 ${lyrics.length} 行歌词`);
 
     } catch (err) {
-        showError(`获取失败：${err.message}`);
+        const msg = err.name === 'TimeoutError' || /timed?\s*out|timeout/i.test(err.message)
+            ? '请求超时，请检查网络后重试'
+            : err.message;
+        showError(`获取失败：${msg}`);
         document.getElementById('retryBtn').style.display = 'inline-block';
     }
 }
